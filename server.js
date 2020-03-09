@@ -7,11 +7,11 @@ const IE = new InferenceEngine();
 app.use(express.json());
 
 app.get('/drugs', (req,res) => {
-    console.log(IE.getSymptoms());
+    res.send(IE.getDrugs());
 });
 
 app.get('/symptoms', (req,res) => {
-  console.log(IE.getSymptoms());
+  res.send(IE.getSymptoms());
 });
 
 app.post('/symptoms', (req,res) => {
@@ -22,22 +22,25 @@ app.post('/symptoms', (req,res) => {
     res.status(400);
 });
 
-app.post('/drugs', (req,res) => {
-    
-});
-
 app.post('/learn', (req,res) => {
     if(req.body["drugName"] != null && req.body["symptoms"] != null)
-        IE.learn(req.body["drugName"], req.body["symptoms"]);
+        IE.learn(req.body["drugName"], req.body["symptoms"]).catch(error => res.status(500).send(error.message));
     else
         res.status(400);
 });
 
 app.get('/infer', (req,res) => {
-    if(req.body["symptoms"] != null)
-        IE.infer(req.body["symptoms"]);
-    else
+    if(req.body["symptoms"] != null){
+        IE.infer(req.body["symptoms"]).then(result => {
+            res.send(result);
+        }).catch(error => {
+            res.status(500).send(error.message);
+        })
+    }
+    else{
         res.status(400);
+
+    }
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Rest CLIENT 
+client.rest
+expert-system-50e65-firebase-adminsdk-ot0ba-8e9b063ac7.json

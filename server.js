@@ -1,10 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
-const port = 3000;
+const port = 3001;
 const InferenceEngine = require("./InferenceEngine/inference-engine");
 const IE = new InferenceEngine(); 
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/drugs', (req,res) => {
     res.send(IE.getDrugs());
@@ -44,9 +46,3 @@ app.get('/infer', (req,res) => {
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
-
-
-
-
-
-

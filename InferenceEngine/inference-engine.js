@@ -1,6 +1,6 @@
 
 const admin = require('firebase-admin');
-const serviceAccount = require('/Users/joshuarenelli/Desktop/repos/expert-system/Expert-System/expert-system-50e65-firebase-adminsdk-ot0ba-8e9b063ac7.json');
+const serviceAccount = require('../expert-system-50e65-firebase-adminsdk-ot0ba-8e9b063ac7.json');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -92,7 +92,7 @@ function retrieveSymptoms(){
       console.log('Error getting documents', err);
     });
     return symptoms;
-  }
+}
 
 function retrieveDrugs(){
     let drugs = [];

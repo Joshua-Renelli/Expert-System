@@ -17,7 +17,12 @@
   },
   "homepage": "https://github.com/Acul132/Expert-System#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "firebase-admin": "^8.9.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/preset-react": "^7.8.3"
   }
 }

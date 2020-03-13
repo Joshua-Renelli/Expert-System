@@ -22,7 +22,10 @@ module.exports = class Api{
     }
 
     async learn(drugName, symptoms){
+        console.log(`Drug Name: ${drugName}`)
+        console.log(`Symptoms: ${symptoms}`)
         let data = {drugName: drugName, symptoms: symptoms}
+        console.log(`Data: ${data}`)
         return fetch(`${this.url}learn`, {
             method: 'POST',
             headers: {

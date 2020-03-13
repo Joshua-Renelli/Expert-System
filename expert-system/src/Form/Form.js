@@ -1,5 +1,6 @@
 import React, {useRef} from 'react';
 import Dropdown from '../SymptomDropdown/SymptomDropdown'
+import Modal from '../Modal/Modal'
 import PieChart from '../PieChart/PieChart'
 import styles from './Form.module.css'
 import Button from '@material-ui/core/Button';
@@ -12,7 +13,7 @@ import CardContent from '@material-ui/core/CardContent';
 class Form extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { api: new Api(), isLoaded: false, promptNewDrug: false, selectedValues: [], symptoms: [], results:[]};
+        this.state = { api: new Api(), isLoaded: false, promptNewDrug: false, showModal: false, selectedValues: [], symptoms: [], results:[]};
     }
 
     handleSubmit() {
@@ -34,7 +35,28 @@ class Form extends React.Component {
 
     displayModal(){
         //Do something here
+        this.setState({showModal: true})
         console.log("display modal");
+    }
+
+    closeModal = () => {
+        this.setState({showModal: false})
+    }
+
+    addNewDrug = (drugName) => {
+        //api call
+        
+        this.state.api.learn(drugName, this.state.selectedValues)
+        .then(response => {
+            //toasty here
+            
+            //console.log("Symptoms: ", symptoms, "drug name", drugName);
+            // this.setState({results: response})
+            // this.setState({promptNewDrug: true})
+        })
+        .catch(error => console.log(error.message));
+
+        this.setState({showModal: false})
     }
 
     componentDidMount() {
@@ -55,6 +77,7 @@ class Form extends React.Component {
         else {
             return (
                 <div className={styles.root}>
+                    {this.state.showModal && <Modal symptoms={this.state.selectedValues} addNewDrug={this.addNewDrug} closeModal={this.closeModal}/>}
                     <Card className={styles.mainCard}>
                         <CardContent>
                             <h2>Select your symptoms:</h2>

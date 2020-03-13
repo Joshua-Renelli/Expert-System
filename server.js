@@ -25,6 +25,7 @@ app.post('/symptoms', (req,res) => {
 });
 
 app.post('/learn', (req,res) => {
+    console.log(req.body);
     if(req.body["drugName"] != null && req.body["symptoms"] != null)
         IE.learn(req.body["drugName"], req.body["symptoms"]).catch(error => res.status(500).send(error.message));
     else

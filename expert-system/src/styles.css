@@ -1,4 +1,5 @@
-#dropdown_component {
-    width: 500px;
-    margin-left: 250px;
+body{
+    margin: 0;
+    padding: 0;
+    background: #94d1d098;
 }

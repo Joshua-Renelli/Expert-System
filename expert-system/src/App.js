@@ -1,11 +1,9 @@
 import React from 'react';
-import Form from './Form'
+import Form from './Form/Form'
 
 function App() {
   return (
-    <>
-        <Form/>
-    </>
+      <Form/>
   )
 }
 

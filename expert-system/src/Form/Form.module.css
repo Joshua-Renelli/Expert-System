@@ -1,0 +1,34 @@
+.root{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.mainCard{
+    width: 65%;
+    overflow: visible !important;
+}
+
+.inputs{
+    display: flex;
+    justify-content: space-between;
+}
+
+.newDrugPrompt{
+    display: flex;
+    align-items: center;
+    margin: 8px 0px -10px 4px;
+}
+
+.newDrugPrompt h4{
+    margin: 0;
+}
+
+.newDrugButtons{
+    margin-left: 8px;
+}
+

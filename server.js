@@ -9,11 +9,11 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/drugs', (req,res) => {
-    res.send(IE.getDrugs());
+    res.json(IE.getDrugs());
 });
 
 app.get('/symptoms', (req,res) => {
-  res.send(IE.getSymptoms());
+  res.json(IE.getSymptoms());
 });
 
 app.post('/symptoms', (req,res) => {
@@ -31,17 +31,16 @@ app.post('/learn', (req,res) => {
         res.status(400);
 });
 
-app.get('/infer', (req,res) => {
-    if(req.body["symptoms"] != null){
-        IE.infer(req.body["symptoms"]).then(result => {
-            res.send(result);
+app.post('/infer', (req,res) => {
+    if(req.body.length > 0){
+        IE.infer(req.body).then(result => {
+            res.json(result);
         }).catch(error => {
             res.status(500).send(error.message);
         })
     }
     else{
         res.status(400);
-
     }
 });
 

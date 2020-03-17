@@ -17,16 +17,18 @@ class PieChart extends Component {
         const myChartRef = this.chartRef.current.getContext("2d");
         let total = 0;
         this.props.drugs.forEach(drug => total += drug.rank)
+        this.props.drugs.forEach(drug => console.log(drug))
+
 
         new Chart(myChartRef, {
             type: "pie",
             data: {
                 //Bring in data
-                labels: this.props.drugs.map(drug => drug.drugName),
+                labels: this.props.drugs.map(drug => drug.drugName.replace(/_/g,' ')),
                 datasets: [
                     {
                         label: "Drugs",
-                        data: this.props.drugs.map(drug => Math.floor(drug.rank *100)),
+                        data: this.props.drugs.map(drug => Math.round(drug.rank *100)),
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -49,7 +51,30 @@ class PieChart extends Component {
             },
             options: {
                 responsive: true,
-                maintainAspectRation: false
+                maintainAspectRation: false,
+                tooltips: {
+                    displayColors: false,
+                    bodyFontSize: 12,
+                    titleFontSize: 16,
+                    titleFontColor: '#ffffff',
+                    titleAlign: 'center',
+                    bodyAlign: 'center',
+                    callbacks: {
+                        title: (tooltipItem, data) => {
+                            console.log(tooltipItem);
+                            console.log(data);
+                            let label = data.labels[tooltipItem[0].index];
+                            let value = data.datasets[tooltipItem[0].datasetIndex].data[tooltipItem[0].index] || 0;
+
+                            return [label,`${value}%`];
+                        },
+                        label: (tooltipItem, data) => {
+                            let symptoms = this.props.drugs.filter(drug => drug.drugName.replace(/_/g,' ') === data.labels[tooltipItem.index])[0].associatedSymptoms
+                            symptoms = symptoms.map(symptom => symptom.replace(/_/g,' '))
+                            return symptoms;
+                        }
+                    }
+                }
             }
         });
 
@@ -61,7 +86,7 @@ class PieChart extends Component {
 		
 		return (
 		<div className={styles.root}>
-            <canvas
+            <canvas 
                 ref={this.chartRef}
                 />
 		</div>

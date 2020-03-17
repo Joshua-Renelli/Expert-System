@@ -31,15 +31,20 @@ module.exports = class InferenceEngine{
             return;
         }
 
-        if(!this._drugs.includes(drugName)){
+        let formattedDrugName = drugName.toLowerCase().replace(' ', '_')
+
+        if(!this._drugs.includes(formattedDrugName)){
             try{
-                await db.collection('rules').doc(drugName.toLowerCase().replace(' ', '_')).set({
+                await db.collection('rules').doc(formattedDrugName).set({
                     symptoms: symptoms
                 })
-                this._drugs.push(drugName)
+                this._drugs.push(formattedDrugName)
             }catch(error){
                 throw new Error(`Error adding new drug: ${error}`);
             }
+        }
+        else{
+            throw new Error(`New drug already exists: ${formattedDrugName}`);
         }
     }
 
@@ -59,8 +64,11 @@ module.exports = class InferenceEngine{
                 let snapshot = await db.collection('rules').where('symptoms', 'array-contains-any', symptoms).get()
                 snapshot.forEach(doc => {
                     let docId = doc.id;
-                    ranking.push({drugName: docId,
-                                rank: calculateRanking(symptoms, doc.data().symptoms)});
+                    let rank = calculateRanking(symptoms, doc.data().symptoms);
+                    let intersection = arrayIntersection(symptoms, doc.data().symptoms);
+                    
+                    if(rank > 0)
+                        ranking.push({drugName: docId, rank: rank, associatedSymptoms: intersection});
                 })
                 ranking.sort((a, b) => (a.rank > b.rank) ? -1 : (a.rank === b.rank) ? ((a.size > b.size) ? 1 : -1) : 1 )
                 return ranking;
@@ -99,7 +107,7 @@ function retrieveDrugs(){
     db.collection('rules').get()
     .then((snapshot) => {
         snapshot.forEach((doc) => {
-            drugs.push(doc.data());
+            drugs.push(doc.id);
         });
     })
     .catch((err) => {
@@ -109,7 +117,12 @@ function retrieveDrugs(){
 }
 
 function calculateRanking(providedSymptoms, totalSymptoms){
-    const intersection = providedSymptoms.filter(symptom => totalSymptoms.includes(symptom))
-    const ranking = intersection.length / totalSymptoms.length;
+    const intersection = arrayIntersection(providedSymptoms,totalSymptoms)
+    const difference = providedSymptoms.filter(symptom => !totalSymptoms.includes(symptom));
+    const ranking = (intersection.length - difference.length) / totalSymptoms.length;
     return ranking;
+}
+
+function arrayIntersection(providedSymptoms,totalSymptoms){
+    return providedSymptoms.filter(symptom => totalSymptoms.includes(symptom));
 }

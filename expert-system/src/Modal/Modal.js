@@ -4,7 +4,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
-import ButtonGroup from '@material-ui/core/ButtonGroup'
+import IconButton from '@material-ui/core/IconButton';
+import CancelIcon from '@material-ui/icons/Cancel';
+import SendIcon from '@material-ui/icons/Send'
 
 class Modal extends React.Component {
     constructor(props) {
@@ -22,7 +24,6 @@ class Modal extends React.Component {
     }
 
     updateDrugName = (event) => {
-        console.log(event.target.value);
         this.setState({drugName: event.target.value});
     }
 
@@ -37,20 +38,29 @@ class Modal extends React.Component {
             <div className={styles.modal} >
                 <Card className={styles.modalContent}>
                     <CardContent >
+                        <IconButton className={styles.cancelButton} color="primary" size="medium" aria-label="close modal" onClick={() => this.closeModal()} component="span">
+                            <CancelIcon size="large" />
+                        </IconButton>
                         <div className={styles.newDrugPrompt}>
-                            <h4>Enter the name of the drug you took for these symptoms:</h4>
+                            <h4 className={styles.headerText}>Enter the name of the drug you took for the following symptoms:</h4>
                             {isLoaded && 
-                                <ul>
+                                <ul className={styles.symptomsList}>
                                 {symptoms.map((value, index) => {
-                                    return <li key={index}>{value}</li>
+                                    return <li key={index}>{value.replace(/_/g,' ')}</li>
                                 })}
                                 </ul>
                             }
-                            <TextField id="" type="" onChange={this.updateDrugName} />
-                            <ButtonGroup className={styles.newDrugButtons} variant="contained" color="primary" aria-label="contained primary button group" size="small">
-                            <Button onClick={() => this.handleSubmit()}>Submit</Button>
-                            <Button onClick={() => this.closeModal()}>Cancel</Button>
-                            </ButtonGroup>
+                            <div className={styles.inputs}>
+                                <TextField className={styles.textField} label="Drug name" onChange={this.updateDrugName} />
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="medium"
+                                    endIcon={<SendIcon/>}
+                                    onClick={() => this.handleSubmit()}>
+                                    Submit
+                                </Button>
+                            </div>
                         </div>
                     </CardContent>
                 </Card>

@@ -22,10 +22,7 @@ module.exports = class Api{
     }
 
     async learn(drugName, symptoms){
-        console.log(`Drug Name: ${drugName}`)
-        console.log(`Symptoms: ${symptoms}`)
         let data = {drugName: drugName, symptoms: symptoms}
-        console.log(`Data: ${data}`)
         return fetch(`${this.url}learn`, {
             method: 'POST',
             headers: {
@@ -33,7 +30,12 @@ module.exports = class Api{
             },
             body: JSON.stringify(data)
         })
-        .then(response => {return response.json()})
-        .catch(error => {throw new Error(error.message)})
+        .then(response => {
+            if(!response.ok){
+                if(response.status === 500){
+                    throw new Error(`New drug already exists: ${drugName}`)
+                }
+            }
+        })
     }
 }

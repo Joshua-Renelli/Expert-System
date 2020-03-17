@@ -2,4 +2,12 @@
     height: 60vh;
     width: 60vw;
     margin-top: 35px;
+    animation-name: pie-chart;
+    animation-duration: 1000ms;
+    transition-timing-function: ease;
+}
+
+@keyframes pie-chart{
+    0% {opacity: 0;}
+    100% {opacity: 1;}
 }

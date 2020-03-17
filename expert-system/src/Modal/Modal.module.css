@@ -19,3 +19,27 @@
     /* border: 1px solid #888; */
     width: 50%; /* Could be more or less, depending on screen size */
   }
+
+.headerText{
+  margin-top: 25px !important;
+}
+
+.inputs{
+  display:flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.textField{
+  width: 80%
+}
+
+.symptomsList{
+  list-style: none;
+  text-transform: capitalize;
+}
+
+.cancelButton{
+  float: right;
+  padding: 6px;
+}

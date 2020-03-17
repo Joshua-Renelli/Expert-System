@@ -5,12 +5,21 @@
     flex-direction: column;
     justify-content: top;
     align-items: center;
-    margin-top: 50px;
 }
 
 .mainCard{
     width: 65%;
+    margin-top: 50px;
     overflow: visible !important;
+    animation: main-card;
+    transition-timing-function: ease-in-out;
+    animation-duration: 1000ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes main-card{
+    0% {margin-top: -150px; opacity: 0}
+    100% {margin-top: 50px; opacity: 1}
 }
 
 .inputs{
@@ -21,7 +30,17 @@
 .newDrugPrompt{
     display: flex;
     align-items: center;
-    margin: 8px 0px -10px 4px;
+    margin: 0 0 -10px 4px;
+
+    animation-name: newDrug;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease;
+    animation-duration: 800ms;
+}
+
+@keyframes newDrug{
+    0% {margin-top: 0; opacity: 0}
+    100% {margin-top: 10px; opacity: 1}
 }
 
 .newDrugPrompt h4{
@@ -30,5 +49,45 @@
 
 .newDrugButtons{
     margin-left: 8px;
+}
+
+.alert{
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
+
+    animation-name: alert;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease;
+    animation-duration: 6000ms;
+}
+
+@keyframes alert{
+    0% {bottom: -50px; opacity: 0;}
+    25% {bottom: 35px; opacity: 1;}
+    50% {bottom: 35px; opacity: 1;}
+    75% {bottom: 35px; opacity: 1;}
+    100% {bottom: -50px; opacity: 0;}
+}    
+
+.copywrite{
+    position: absolute;
+    display: fixed;
+    bottom: 2px;
+    right: 2px;
+    font-size: 10px;
+}
+
+.logo{
+  font-family: 'Bree Serif', serif;
+  position: fixed;
+  left: 5px;
+  top: -20px;
+  font-size: 30px;
+}
+
+.logo > b{
+    color: rgba(0, 71, 177, 0.596);
+    font-weight: bolder;
 }
 

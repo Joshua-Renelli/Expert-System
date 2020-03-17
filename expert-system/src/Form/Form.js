@@ -7,20 +7,22 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import Alert from '@material-ui/lab/Alert';
 
  const Api = require('../Api');
 
 class Form extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { api: new Api(), isLoaded: false, promptNewDrug: false, showModal: false, selectedValues: [], symptoms: [], results:[]};
+        this.state = { api: new Api(), isLoaded: false, loadingDrugs: false, promptNewDrug: false,
+             showModal: false, selectedValues: [], symptoms: [], results:[], createdNewDrug: false, drugAlertText: "", drugAlertSeverity: "success"};
     }
 
     handleSubmit() {
+        this.setState({loadingDrugs: true})
         this.state.api.infer(this.state.selectedValues)
         .then(response => {
-            this.setState({results: response})
-            this.setState({promptNewDrug: true})
+            this.setState({results: response, loadingDrugs: false, promptNewDrug: true})
         })
         .catch(error => console.log(error.message));
     }
@@ -34,9 +36,7 @@ class Form extends React.Component {
     }
 
     displayModal(){
-        //Do something here
-        this.setState({showModal: true})
-        console.log("display modal");
+        this.setState({showModal: true, createdNewDrug: false})
     }
 
     closeModal = () => {
@@ -44,17 +44,15 @@ class Form extends React.Component {
     }
 
     addNewDrug = (drugName) => {
-        //api call
-        
         this.state.api.learn(drugName, this.state.selectedValues)
         .then(response => {
-            //toasty here
-            
-            //console.log("Symptoms: ", symptoms, "drug name", drugName);
-            // this.setState({results: response})
-            // this.setState({promptNewDrug: true})
+            this.setState({drugAlertText: `Successfully added new drug: ${drugName}`,
+            drugAlertSeverity: "success", createdNewDrug: true})
         })
-        .catch(error => console.log(error.message));
+        .catch(error => {
+            this.setState({drugAlertText: error.message,
+            drugAlertSeverity: "error", createdNewDrug: true})
+        })
 
         this.setState({showModal: false})
     }
@@ -96,9 +94,16 @@ class Form extends React.Component {
                             }
                         </CardContent>
                     </Card>
-                    {this.state.results.length > 0 &&
+                    {this.state.results.length > 0 && !this.state.loadingDrugs &&
                         <PieChart drugs={this.state.results}/>
                     }
+                    {this.state.createdNewDrug && 
+                    <Alert className={styles.alert} variant="filled" severity={this.state.drugAlertSeverity}>
+                        {this.state.drugAlertText}
+                    </Alert>
+                    }
+                    <h1 className={styles.logo}>pharm<b>ASSIST</b>™</h1>
+                    <h3 className={styles.copywrite}>© 2020 Joshua Renelli & Paolo Scola</h3>
                 </div>   
             )
         }

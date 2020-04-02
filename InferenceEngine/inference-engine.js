@@ -31,10 +31,13 @@ module.exports = class InferenceEngine{
             return;
         }
 
+        //Format the drug name to match the current formatting of data 
         let formattedDrugName = drugName.toLowerCase().replace(' ', '_')
 
+        //Check to ensure that the drug does not already exist
         if(!this._drugs.includes(formattedDrugName)){
             try{
+                //Add the drug to the database
                 await db.collection('rules').doc(formattedDrugName).set({
                     symptoms: symptoms
                 })
@@ -54,6 +57,7 @@ module.exports = class InferenceEngine{
             if(invalid.length > 0){
                 throw new Error(`The following symptoms do not exist: ${invalid}`);
             }
+            //Ensure that 10 or less symptoms have been included as 'array-contians-any' has a max of 10 included elements
             if(symptoms.length > 10){
                 throw new Error('Can only query up to 10 symptoms at once!');
             }
@@ -61,17 +65,19 @@ module.exports = class InferenceEngine{
             let ranking = []
 
             try{
+                //Retrieve all medications that contain at least ONE of the provided symptoms
                 let snapshot = await db.collection('rules').where('symptoms', 'array-contains-any', symptoms).get()
                 snapshot.forEach(doc => {
                     let docId = doc.id;
-                    let rank = calculateRanking(symptoms, doc.data().symptoms);
+                    let rank = calculateRanking(symptoms, doc.data().symptoms);     //Calculate the ranking of each medication
                     let intersection = arrayIntersection(symptoms, doc.data().symptoms);
                     let difference = arrayDifference(symptoms, doc.data().symptoms);
                     
-                    if(rank > 0)
-                        ranking.push({drugName: docId, rank: rank, associatedSymptoms: intersection, nonAssociatedSymptoms: difference});
+                    ranking.push({drugName: docId, rank: rank, associatedSymptoms: intersection, nonAssociatedSymptoms: difference});
                 })
+                //Sort the array of medications based on rank value
                 ranking.sort((a, b) => (a.rank > b.rank) ? -1 : (a.rank === b.rank) ? ((a.size > b.size) ? 1 : -1) : 1 )
+                //Limit total returned medicaitons if there are more than 6 results
                 if(ranking.length > 6)
                     ranking = ranking.slice(0,6)
 
@@ -121,10 +127,8 @@ function retrieveDrugs(){
 }
 
 function calculateRanking(providedSymptoms, totalSymptoms){
-    const intersection = arrayIntersection(providedSymptoms,totalSymptoms)
-    //const difference = arrayDifference(providedSymptoms,totalSymptoms)
-    //const ranking = (intersection.length - difference.length) / totalSymptoms.length;
-    const ranking = intersection.length / totalSymptoms.length;
+    const intersection = arrayIntersection(providedSymptoms,totalSymptoms);
+    const ranking = intersection.length / providedSymptoms.length;
     return ranking;
 }
 

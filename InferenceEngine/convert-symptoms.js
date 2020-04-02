@@ -15,26 +15,30 @@ console.log("Running...")
 db.collection('rules').get()
 .then((snapshot) => {
     snapshot.forEach((doc) => {
+        //Format the symptom information and store in the drugs JSON
         drugs[doc.id] = doc.data().symptoms.map(symptom => symptom.replace(/ /g,"_").toLowerCase());
     });
     
-    // Object.keys(drugs).forEach((drug) => {
-    //     drugs[drug].forEach((symptom) => {
-    //         if(!symptoms.includes(symptom)){
-    //             symptoms.push(symptom);
-    //             //db.collection('facts').doc(symptom).set({})
-    //         }
-    //     })
-    // })
+    //For every unique occurence of a symptom, add it to the facts collection
+    Object.keys(drugs).forEach((drug) => {
+        drugs[drug].forEach((symptom) => {
+            if(!symptoms.includes(symptom)){
+                symptoms.push(symptom);
+                db.collection('facts').doc(symptom).set({})
+            }
+        })
+    })
 })
 .then(() => {
+    //Go through each drug and replace the unformatted symptoms data with the newly formatted data
     let batch = db.batch();
     Object.keys(drugs).forEach((drug) => {
         batch.set(rulesRef.doc(drug), {symptoms: drugs[drug]})
     })
-    batch.commit().then((res) => console.log(res))
+    batch.commit().then((res) => console.log(res));
+    console.log("Complete!");
 })
 .catch((err) => {
-    console.log('Error getting documents', err);
+    console.log('Error: ', err);
 });
 

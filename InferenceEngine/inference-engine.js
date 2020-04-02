@@ -72,6 +72,9 @@ module.exports = class InferenceEngine{
                         ranking.push({drugName: docId, rank: rank, associatedSymptoms: intersection, nonAssociatedSymptoms: difference});
                 })
                 ranking.sort((a, b) => (a.rank > b.rank) ? -1 : (a.rank === b.rank) ? ((a.size > b.size) ? 1 : -1) : 1 )
+                if(ranking.length > 6)
+                    ranking = ranking.slice(0,6)
+
                 return ranking;
                 
             }catch(error){

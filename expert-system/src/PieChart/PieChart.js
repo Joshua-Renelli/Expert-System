@@ -19,8 +19,7 @@ class PieChart extends Component {
         this.props.drugs.forEach(drug => total += drug.rank)
         this.props.drugs.forEach(drug => console.log(drug))
 
-
-        new Chart(myChartRef, {
+        var chart = new Chart(myChartRef, {
             type: "pie",
             data: {
                 //Bring in data
@@ -85,6 +84,20 @@ class PieChart extends Component {
             }
         });
 
+        var canvas = document.getElementById("pieChart");
+        canvas.onclick = (event) => {
+            let selectedSection = chart.getElementsAtEvent(event);
+            if(selectedSection[0]){
+                let chartData = selectedSection[0]['_chart'].config.data;
+                let index = selectedSection[0]['_index'];
+                let selectedDrugName = chartData.labels[index];
+                
+                let url = `https://www.drugs.com/search.php?searchterm=${selectedDrugName}`;
+
+                window.open(url, '_blank');
+            }
+        }
+
         
         let displayDrugs = this.props.drugs.map(drug => {return {label: drug.drugName, y:Math.floor((drug.rank/total)*100)}})
     }
@@ -94,6 +107,7 @@ class PieChart extends Component {
 		return (
 		<div className={styles.root}>
             <canvas 
+                id="pieChart"
                 ref={this.chartRef}
                 />
 		</div>

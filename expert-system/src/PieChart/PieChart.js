@@ -55,14 +55,16 @@ class PieChart extends Component {
                 tooltips: {
                     displayColors: false,
                     bodyFontSize: 12,
+                    footerFontSize: 12,
+                    footerAlign: 'center',
+                    footerFontStyle: 'normal',
+                    footerFontColor: '#9fa2a6',
                     titleFontSize: 16,
                     titleFontColor: '#ffffff',
                     titleAlign: 'center',
                     bodyAlign: 'center',
                     callbacks: {
                         title: (tooltipItem, data) => {
-                            console.log(tooltipItem);
-                            console.log(data);
                             let label = data.labels[tooltipItem[0].index];
                             let value = data.datasets[tooltipItem[0].datasetIndex].data[tooltipItem[0].index] || 0;
 
@@ -70,6 +72,11 @@ class PieChart extends Component {
                         },
                         label: (tooltipItem, data) => {
                             let symptoms = this.props.drugs.filter(drug => drug.drugName.replace(/_/g,' ') === data.labels[tooltipItem.index])[0].associatedSymptoms
+                            symptoms = symptoms.map(symptom => symptom.replace(/_/g,' '))
+                            return symptoms;
+                        },
+                        footer: (tooltipItem, data) => {
+                            let symptoms = this.props.drugs.filter(drug => drug.drugName.replace(/_/g,' ') === data.labels[tooltipItem[0].index])[0].nonAssociatedSymptoms
                             symptoms = symptoms.map(symptom => symptom.replace(/_/g,' '))
                             return symptoms;
                         }

@@ -66,9 +66,10 @@ module.exports = class InferenceEngine{
                     let docId = doc.id;
                     let rank = calculateRanking(symptoms, doc.data().symptoms);
                     let intersection = arrayIntersection(symptoms, doc.data().symptoms);
+                    let difference = arrayDifference(symptoms, doc.data().symptoms);
                     
                     if(rank > 0)
-                        ranking.push({drugName: docId, rank: rank, associatedSymptoms: intersection});
+                        ranking.push({drugName: docId, rank: rank, associatedSymptoms: intersection, nonAssociatedSymptoms: difference});
                 })
                 ranking.sort((a, b) => (a.rank > b.rank) ? -1 : (a.rank === b.rank) ? ((a.size > b.size) ? 1 : -1) : 1 )
                 return ranking;
@@ -118,11 +119,17 @@ function retrieveDrugs(){
 
 function calculateRanking(providedSymptoms, totalSymptoms){
     const intersection = arrayIntersection(providedSymptoms,totalSymptoms)
-    const difference = providedSymptoms.filter(symptom => !totalSymptoms.includes(symptom));
-    const ranking = (intersection.length - difference.length) / totalSymptoms.length;
+    //const difference = arrayDifference(providedSymptoms,totalSymptoms)
+    //const ranking = (intersection.length - difference.length) / totalSymptoms.length;
+    const ranking = intersection.length / totalSymptoms.length;
     return ranking;
 }
 
 function arrayIntersection(providedSymptoms,totalSymptoms){
     return providedSymptoms.filter(symptom => totalSymptoms.includes(symptom));
+}
+
+//Returns whats in the Total but NOT in the Provided
+function arrayDifference(providedSymptoms, totalSymptoms){
+    return totalSymptoms.filter(symptom => !providedSymptoms.includes(symptom));
 }

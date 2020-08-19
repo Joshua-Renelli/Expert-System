@@ -13,6 +13,7 @@ class SymptomDropdown extends React.Component {
     }
 
     handleChange = (event, data) => {
+        //Calls the callback function provided in the props 
         this.props.handleUpdate(data.value);
     }
 

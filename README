@@ -1,0 +1,7 @@
+In order to use the application 2 npm scripts must be ran: 
+    "start-server"
+    and 
+    "start - expert system"
+
+These scripts can be found in ./package.json and ./expert-system/package.json
+

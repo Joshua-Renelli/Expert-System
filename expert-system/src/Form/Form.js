@@ -18,9 +18,10 @@ class Form extends React.Component {
              showModal: false, selectedValues: [], symptoms: [], results:[], createdNewDrug: false, drugAlertText: "", drugAlertSeverity: "success"};
     }
 
+    //Handler function for infer button
     handleSubmit() {
         this.setState({loadingDrugs: true})
-        this.state.api.infer(this.state.selectedValues)
+        this.state.api.infer(this.state.selectedValues) //Call API
         .then(response => {
             this.setState({results: response, loadingDrugs: false, promptNewDrug: true})
         })
@@ -43,6 +44,7 @@ class Form extends React.Component {
         this.setState({showModal: false})
     }
 
+    //Handler function for adding a new drug with the modal
     addNewDrug = (drugName) => {
         this.state.api.learn(drugName, this.state.selectedValues)
         .then(response => {
@@ -57,6 +59,7 @@ class Form extends React.Component {
         this.setState({showModal: false})
     }
 
+    //Load initial values
     componentDidMount() {
         this.state.api.getSymptoms()
         .then(response => {

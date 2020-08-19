@@ -16,11 +16,11 @@ class Modal extends React.Component {
 
     componentDidMount(){
         this.setState({isLoaded:true, symptoms: this.props.symptoms})
-        setTimeout(() => console.log(this.state.symptoms), 1000);
+        setTimeout(() => console.log(this.state.symptoms), 1000);   //Set the stae of the symptoms after they have been loaded in
     }
 
     handleSubmit () {
-        this.props.addNewDrug(this.state.drugName);
+        this.props.addNewDrug(this.state.drugName);     //Call the handler function passed in as a prop
     }
 
     updateDrugName = (event) => {

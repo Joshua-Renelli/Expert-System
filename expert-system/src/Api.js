@@ -3,12 +3,14 @@ module.exports = class Api{
         this.url = "http://localhost:3001/"
     }
 
+    //Returns array of all symptoms
     async getSymptoms() {
         return fetch(`${this.url}symptoms`)
         .then((response) => {return response.json()})
         .catch(error => { throw new Error("Cannot fetch symptoms")})
     }
 
+    //Infers data
     async infer(symptoms){
         return fetch(`${this.url}infer`, {
             method: 'POST',
@@ -21,6 +23,7 @@ module.exports = class Api{
         .catch(error => {throw new Error(error.message)})
     }
 
+    //Adds new drugs to db
     async learn(drugName, symptoms){
         let data = {drugName: drugName, symptoms: symptoms}
         return fetch(`${this.url}learn`, {

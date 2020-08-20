@@ -4,7 +4,10 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start-server": "node server.js"
+    "start-server": "node server.js",
+    "build": "cd expert-system && npm run build",
+    "install-client": "cd expert-system && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build"
   },
   "repository": {
     "type": "git",

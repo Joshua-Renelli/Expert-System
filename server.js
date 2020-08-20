@@ -47,4 +47,8 @@ app.post('/infer', (req,res) => {
     }
 });
 
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static('expert-system/build'))
+}
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

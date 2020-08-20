@@ -1,6 +1,11 @@
 module.exports = class Api{
     constructor(){
-        this.url = "http://localhost:3001/"
+        if(process.env.NODE_ENV === 'local'){
+            this.url = "http://localhost:3001/"
+        }
+        else if(process.env.NODE_ENV === 'production'){
+            this.url = "https://expert-system-server.herokuapp.com/"
+        }
     }
 
     //Returns array of all symptoms

@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 const InferenceEngine = require("./InferenceEngine/inference-engine");
 const IE = new InferenceEngine();   //Create instance of the inference engine 
 

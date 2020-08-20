@@ -1,9 +1,9 @@
 var Api = class Api{
     constructor(){
-        if(process.env.NODE_ENV === 'local'){
+        if(!process.env.NODE_ENV){
             this.url = "http://localhost:3001/"
         }
-        else if(process.env.NODE_ENV === 'production'){
+        else{
             this.url = "https://expert-system-server.herokuapp.com/"
         }
     }

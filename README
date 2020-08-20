@@ -1,7 +1,16 @@
-In order to use the application 2 npm scripts must be ran: 
-    "start-server"
-    and 
-    "start - expert system"
+## Hosted Project
+https://expert-system-server.herokuapp.com/
 
-These scripts can be found in ./package.json and ./expert-system/package.json
+## Project Summary 
+The purpose of this inference engine is infer which medication would be appropriate to take, given a set of inputted symptoms.
+
+All information in the data sets of symptoms and medications are based on medical information gathered from a research study.
+
+## How To Use
+1. Open the multi-select dropdown to select the symptoms that you are experiencing.
+2. Select "infer" to display the results
+3. The pie chart will represent the percentage chance that any given medication will be able to treat the symptoms you entered. 
+    * Clicking a medication on the pie chart will bring you to the associated webMD page for more information on that medication 
+4. Clicking "yes" to on "Did you take another drug for these exact symptoms?", allows you to enter a drug that was effective against the current set of symptoms you submitted, which gets entered into the DB and thus allows the inference engine to "Learn"
+
 

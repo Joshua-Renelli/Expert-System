@@ -106,7 +106,6 @@ class Form extends React.Component {
                     </Alert>
                     }
                     <h1 className={styles.logo}>pharm<b>ASSIST</b>™</h1>
-                    <h3 className={styles.copywrite}>© 2020 Joshua Renelli & Paolo Scola</h3>
                 </div>   
             )
         }

@@ -1,4 +1,4 @@
-module.exports = class Api{
+var Api = class Api{
     constructor(){
         if(process.env.NODE_ENV === 'local'){
             this.url = "http://localhost:3001/"
@@ -47,3 +47,5 @@ module.exports = class Api{
         })
     }
 }
+
+export default Api;
